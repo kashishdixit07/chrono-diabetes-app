@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>ChronoNutriCare App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7f5;
+            color: #26332d;
+        }
+
+        header {
+            background: #315c4a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 15px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #315c4a;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #315c4a;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #244638;
+        }
+
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #eef6f1;
+        }
+
+        .recommendation {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 7px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>ChronoNutriCare</h1>
+    <p>Chrononutrition Support for Diabetes Management</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>User Information</h2>
+
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label for="age">Age</label>
+        <input type="number" id="age" placeholder="Enter age">
+
+        <label for="diabetes">Diabetes Type</label>
+        <select id="diabetes">
+            <option value="">Select</option>
+            <option value="type1">Type 1 Diabetes</option>
+            <option value="type2">Type 2 Diabetes</option>
+            <option value="prediabetes">Prediabetes</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Meal Information</h2>
+
+        <label for="meal">Meal</label>
+        <select id="meal">
+            <option value="">Select meal</option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="snack">Snack</option>
+            <option value="dinner">Dinner</option>
+        </select>
+
+        <label for="time">Meal Time</label>
+        <input type="time" id="time">
+
+        <label for="glucose">Blood Glucose Reading (mg/dL)</label>
+        <input type="number" id="glucose" placeholder="Enter reading">
+
+        <button onclick="analyzeData()">Analyze My Meal Timing</button>
+
+    </div>
+
+
+    <div id="result" class="card">
+
+        <h2>Chrononutrition Analysis</h2>
+
+        <p id="summary"></p>
+
+        <div class="recommendation">
+            <strong>Recommendation:</strong>
+            <p id="recommendation"></p>
+        </div>
+
+        <div class="recommendation">
+            <strong>Important:</strong>
+            <p>
+                This prototype is for educational and research purposes
+                and does not replace professional medical advice.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    ChronoNutriCare | Student Research Prototype
+</footer>
+
+
+<script>
+
+function analyzeData() {
+
+    const name = document.getElementById("name").value;
+    const meal = document.getElementById("meal").value;
+    const time = document.getElementById("time").value;
+    const glucose = Number(document.getElementById("glucose").value);
+
+    if (!name || !meal || !time || !glucose) {
+        alert("Please complete all required fields.");
+        return;
+    }
+
+    let recommendation = "";
+
+    const hour = Number(time.split(":")[0]);
+
+    if (meal === "breakfast") {
+
+        if (hour <= 9) {
+            recommendation =
+                "Your breakfast timing is within a generally early morning window. Maintaining a consistent breakfast schedule may support regular meal timing.";
+        } else {
+            recommendation =
+                "Your breakfast is relatively late. Consider discussing a more consistent and earlier breakfast schedule with your dietitian.";
+        }
+
+    } else if (meal === "dinner") {
+
+        if (hour <= 20) {
+            recommendation =
+                "Your dinner timing is relatively early. Maintaining an earlier and consistent dinner schedule may be beneficial for metabolic health.";
+        } else {
+            recommendation =
+                "Your dinner is relatively late. Earlier and consistent evening meals may be preferable for metabolic health.";
+        }
+
+    } else {
+
+        recommendation =
+            "Maintain consistent meal timing and monitor your glucose response. Individual recommendations should be personalized by a healthcare professional.";
+    }
+
+    document.getElementById("summary").innerHTML =
+        "Hello <strong>" + name +
+        "</strong>. Your recorded " + meal +
+        " time is <strong>" + time +
+        "</strong> and your entered glucose value is <strong>" +
+        glucose + " mg/dL</strong>.";
+
+    document.getElementById("recommendation").innerText =
+        recommendation;
+
+    document.getElementById("result").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
